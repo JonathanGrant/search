@@ -128,9 +128,8 @@ def breadthFirstSearch(problem):
     "*** YOUR CODE HERE ***"
     fringe = util.Stack()
     fringe.push((problem.getStartState(),[],[]))
-    visited = []
     while not fringe.isEmpty():
-        node, actions = fringe.pop()
+        node, actions, visited = fringe.pop()
         for coord, direction, steps in problem.getSuccessors(node):
             if not coord in visited:
                 if problem.isGoalState(coord):
