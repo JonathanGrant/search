@@ -72,6 +72,29 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def df(problem, visited, state, operations):
+    from game import Directions
+    #s = Directions.SOUTH
+    #w = Directions.WEST
+    #n = Directions.NORTH
+    #e = Directions.EAST
+    print '1'
+    for s in problem.getSuccessors(problem):
+        if problem.isGoalState(s):
+            visited.append(s)
+            #Which direction?
+            if s.direction == 'South':
+                print 'South'
+            return visited, operations
+        if s in visited:
+            pass
+        else:
+            visited.append(s)
+            #Which direction is that?
+            
+            return df(problem, visited, s, operations)
+    return visited, operations
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -87,7 +110,24 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    print "Start:", problem.getStartState()
+    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    successors = problem.getSuccessors(problem.getStartState())
+    
+    visited_states = []
+    operations = []
+    visited_states.append(problem.getStartState())
+    
+    for s in successors:
+        if s in visited_states:
+            pass
+        else:
+            visited_states.append(s)
+            visited_states, operations = df(problem, visited_states,s, operations)
+            
+    return operations
+    
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
