@@ -127,14 +127,16 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     fringe = util.Stack()
-    fringe.push((problem.getStartState(),[],[]))
+    fringe.push((problem.getStartState(),[]))
+    visited = []
     while not fringe.isEmpty():
-        node, actions, visited = fringe.pop()
+        node, actions = fringe.pop()
         for coord, direction, steps in problem.getSuccessors(node):
             if not coord in visited:
                 if problem.isGoalState(coord):
                     return actions + [direction]
-                fringe.push((coord, actions + [direction], visited + [node] ))
+                fringe.push((coord, actions + [direction]))
+                visited.append(coord)
     return []
         
 
