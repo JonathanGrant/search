@@ -454,6 +454,23 @@ class AStarFoodSearchAgent(SearchAgent):
         self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
 
+def closestPoint (fromPoint, candidatesList):
+    if len(candidatesList) == 0:
+        return None
+
+    closestCorner = candidatesList[0]
+    closestCost = euclidieanDistance(fromPoint, closestCorner)
+    for candidate in candidatesList[1:]:
+        thisCost = euclidieanDistance(fromPoint, candidate)
+        if closestCost > thisCost:
+  		    closestCost = thisCost
+  		    closestCorner = candidate
+  
+    return closestCorner       
+
+def euclidieanDistance (pointA, pointB):
+    return abs(pointA[0] - pointB[0]) + abs(pointA[1] - pointB[1])
+        
 def foodHeuristic(state, problem):
     """
     Your heuristic for the FoodSearchProblem goes here.
@@ -484,7 +501,13 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    foodList = foodGrid.asList()
+    if len(foodList) == 0:
+        return 0
+  
+    closestFood = closestPoint(position, foodList)
+    return euclidieanDistance(position, closestFood) + len(foodList)
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
