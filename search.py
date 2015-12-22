@@ -95,6 +95,8 @@ def df(problem, visited, state, operations):
             return df(problem, visited, s, operations)
     return visited, operations
 
+
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -110,29 +112,32 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    successors = problem.getSuccessors(problem.getStartState())
-    
-    visited_states = []
-    operations = []
-    visited_states.append(problem.getStartState())
-    
-    for s in successors:
-        if s in visited_states:
-            pass
-        else:
-            visited_states.append(s)
-            visited_states, operations = df(problem, visited_states,s, operations)
-            
-    return operations
-    
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(),[],[]))
+    while not fringe.isEmpty():
+        node, actions, visited = fringe.pop()
+        for coord, direction, steps in problem.getSuccessors(node):
+            if not coord in visited:
+                if problem.isGoalState(coord):
+                    return actions + [direction]
+                fringe.push((coord, actions + [direction], visited + [node] ))
+    return []
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    fringe = util.Stack()
+    fringe.push((problem.getStartState(),[],[]))
+    visited = []
+    while not fringe.isEmpty():
+        node, actions = fringe.pop()
+        for coord, direction, steps in problem.getSuccessors(node):
+            if not coord in visited:
+                if problem.isGoalState(coord):
+                    return actions + [direction]
+                fringe.push((coord, actions + [direction], visited + [node] ))
+    return []
+        
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
